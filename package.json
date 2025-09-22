@@ -6,22 +6,42 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.31.10",
+    "@prisma/client": "^6.15.0",
+    "@supabase/supabase-js": "^2.57.4",
+    "@types/xlsx": "^0.0.35",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.543.0",
+    "jspdf": "^2.5.2",
+    "html2canvas": "^1.4.1",
+    "mongodb": "^6.19.0",
+    "next": "15.5.2",
+    "prisma": "^6.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "survey-core": "^2.3.6",
+    "survey-react-ui": "^2.3.6",
+    "surveyjs-widgets": "^1.12.53",
+    "tailwind-merge": "^3.3.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "shadcn": "^3.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

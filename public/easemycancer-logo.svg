@@ -1,0 +1,13 @@
+<svg width="832" height="413" viewBox="0 0 832 413" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ease My Cancer">
+  <g>
+    <g transform="translate(140,156)">
+      <path d="M0 0c24 0 44 39 44 88s-20 88-44 88C12 176 0 137 0 88S12 0 0 0z" fill="#6A86AF" opacity="0.35"/>
+      <path d="M24 -4c22 0 40 41 40 92s-18 92-40 92c10-20 16-50 16-92S34 16 24 -4z" fill="#7F98BF" opacity="0.55"/>
+      <path d="M48 4c20 0 36 38 36 84s-16 84-36 84c8-18 12-46 12-84S56 22 48 4z" fill="#9FB0CC" opacity="0.7"/>
+      <path d="M70 18c18 0 32 32 32 70s-14 70-32 70c6-15 10-39 10-70s-4-55-10-70z" fill="#BFD0E0" opacity="0.9"/>
+    </g>
+    <text x="300" y="210" font-family="Helvetica, Arial, sans-serif" font-size="64" font-weight="600" fill="#7f98bf">ease</text>
+    <text x="480" y="210" font-family="Helvetica, Arial, sans-serif" font-size="64" fill="#6E86A8">mycancer</text>
+  </g>
+</svg>
+
