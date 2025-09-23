@@ -4,7 +4,7 @@ import { useState } from "react"
 import jsPDF from "jspdf"
 import html2canvas from "html2canvas"
 import { Button } from "@/components/ui/button"
-import { Download, FileText } from "lucide-react"
+import { Download } from "lucide-react"
 
 interface PDFGeneratorProps {
 	data: Record<string, unknown>
@@ -132,7 +132,7 @@ function generatePDFHTML(data: Record<string, unknown>, title: string, subtitle:
 				</h3>
 				<div style="background-color: #f9fafb; padding: 20px; border-radius: 8px;">
 					${Object.entries(data)
-						.filter(([key, value]) => value !== null && value !== undefined && value !== "")
+						.filter(([, value]) => value !== null && value !== undefined && value !== "")
 						.map(([key, value]) => `
 							<div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">
 								<span style="font-weight: 600; color: #374151; text-transform: capitalize;">

@@ -5,12 +5,13 @@ import { requireAdmin } from "@/lib/auth"
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		await requireAdmin()
+		const { id } = await params
 		const db = await getDatabase()
-		const form = await db.collection("forms").findOne({ _id: new ObjectId(params.id) })
+		const form = await db.collection("forms").findOne({ _id: new ObjectId(id) })
 		if (!form) return NextResponse.json({ error: "Not found" }, { status: 404 })
 		return NextResponse.json(form)
 	} catch (error) {
@@ -21,10 +22,11 @@ export async function GET(
 
 export async function PUT(
 	req: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		await requireAdmin()
+		const { id } = await params
 		const body = await req.json()
 		const { title, description, schema } = body
 		if (!title || !description || !schema) {
@@ -32,7 +34,7 @@ export async function PUT(
 		}
 		const db = await getDatabase()
 		const result = await db.collection("forms").updateOne(
-			{ _id: new ObjectId(params.id) },
+			{ _id: new ObjectId(id) },
 			{ $set: { title, description, schema, updatedAt: new Date().toISOString() } }
 		)
 		if (result.matchedCount === 0) {
@@ -47,12 +49,13 @@ export async function PUT(
 
 export async function DELETE(
 	req: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		await requireAdmin()
+		const { id } = await params
 		const db = await getDatabase()
-		const result = await db.collection("forms").deleteOne({ _id: new ObjectId(params.id) })
+		const result = await db.collection("forms").deleteOne({ _id: new ObjectId(id) })
 		if (result.deletedCount === 0) {
 			return NextResponse.json({ error: "Not found" }, { status: 404 })
 		}

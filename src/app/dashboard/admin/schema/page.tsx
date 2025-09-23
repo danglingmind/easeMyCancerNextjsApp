@@ -1,29 +1,23 @@
 import { requireAdmin } from "@/lib/auth"
-import { getDatabase } from "@/lib/mongodb"
 import { SchemaRepository } from "@/lib/repositories/schemaRepository"
-import { GoogleSheetsConnector } from "@/lib/connectors/googleSheets"
-import { type ConnectedSourceConfig } from "@/lib/connectors/connector"
+import { type SchemaField } from "@/lib/connectors/connector"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import ImportSchemaFormClient from "./import-schema-form-client"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Plus, Edit, Save, Trash2, Download } from "lucide-react"
-import { Suspense } from "react"
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { Plus, Edit, Trash2 } from "lucide-react"
 
 export default async function SchemaManagementPage({
 	searchParams,
 }: {
-	searchParams?: { status?: string; message?: string }
+	searchParams?: Promise<{ status?: string; message?: string }>
 }) {
 	await requireAdmin()
 
+	const resolvedSearchParams = await searchParams
 	const schemaRepo = new SchemaRepository()
 	const defaultSpreadsheetId = process.env.NEXT_PUBLIC_DEFAULT_SPREADSHEET_ID
 
@@ -53,21 +47,21 @@ export default async function SchemaManagementPage({
 				<ImportSchemaDialog spreadsheetId={defaultSpreadsheetId} />
 			</div>
 
-			{searchParams?.status === "success" && (
-				<div className="rounded-md bg-green-50 p-4">
-					<div className="text-sm text-green-800">
-						{searchParams?.message || "Schema imported successfully."}
-					</div>
+		{resolvedSearchParams?.status === "success" && (
+			<div className="rounded-md bg-green-50 p-4">
+				<div className="text-sm text-green-800">
+					{resolvedSearchParams?.message || "Schema imported successfully."}
 				</div>
-			)}
+			</div>
+		)}
 
-			{searchParams?.status === "error" && (
-				<div className="rounded-md bg-red-50 p-4">
-					<div className="text-sm text-red-700">
-						{searchParams?.message || "Failed to import schema. Check configuration."}
-					</div>
+		{resolvedSearchParams?.status === "error" && (
+			<div className="rounded-md bg-red-50 p-4">
+				<div className="text-sm text-red-700">
+					{resolvedSearchParams?.message || "Failed to import schema. Check configuration."}
 				</div>
-			)}
+			</div>
+		)}
 
 			{currentSchema ? (
 				<Card>
@@ -120,7 +114,11 @@ async function ImportSchemaDialog({ spreadsheetId }: { spreadsheetId: string }) 
 
 // Replaced by client component for reliability across environments
 
-async function SchemaEditor({ schema }: { schema: any }) {
+interface Schema {
+	fields: SchemaField[]
+}
+
+async function SchemaEditor({ schema }: { schema: Schema }) {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
@@ -143,7 +141,7 @@ async function SchemaEditor({ schema }: { schema: any }) {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{schema.fields.map((field: any, index: number) => (
+						{schema.fields.map((field: SchemaField, index: number) => (
 						<TableRow key={index}>
 							<TableCell className="font-medium">{field.key}</TableCell>
 							<TableCell>{field.label}</TableCell>
@@ -178,6 +176,8 @@ async function SchemaEditor({ schema }: { schema: any }) {
 	)
 }
 
+// This function is not used in the current implementation
+/*
 async function importSchemaAction(formData: FormData) {
 	"use server"
 	
@@ -220,5 +220,6 @@ async function importSchemaAction(formData: FormData) {
 		redirect(`/dashboard/admin/schema?status=error&message=${encodeURIComponent(message)}`)
 	}
 }
+*/
 
 

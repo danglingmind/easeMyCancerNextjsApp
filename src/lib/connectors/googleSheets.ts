@@ -1,8 +1,8 @@
-import { google } from 'googleapis'
+import { google, sheets_v4 } from 'googleapis'
 import { type ConnectorService, type ConnectedSourceConfig, type ExternalSchemaDefinition, type SchemaField } from "./connector"
 
 export class GoogleSheetsConnector implements ConnectorService {
-  private sheets: any
+  private sheets: sheets_v4.Sheets
 
   constructor() {
     // Initialize Google Sheets API
@@ -88,7 +88,7 @@ export class GoogleSheetsConnector implements ConnectorService {
         return value || ''
       })
 
-      const response = await this.sheets.spreadsheets.values.append({
+      await this.sheets.spreadsheets.values.append({
         spreadsheetId: sourceId,
         range: `${sheetName}!A:Z`,
         valueInputOption: 'RAW',
@@ -138,7 +138,7 @@ export class GoogleSheetsConnector implements ConnectorService {
     }
   }
 
-  async deleteRow(config: ConnectedSourceConfig, externalRowId: string): Promise<void> {
+  async deleteRow(config: ConnectedSourceConfig): Promise<void> {
     try {
       const { sourceId, sheetName = 'Sheet1' } = config
       
