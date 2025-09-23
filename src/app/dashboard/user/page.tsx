@@ -1,70 +1,88 @@
-"use client"
-import { useEffect, useState } from "react"
-import { redirect } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
-import { SchemaRepository } from "@/lib/repositories/schemaRepository"
-import { type SchemaField } from "@/lib/connectors/connector"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { FileText, Clock, CheckCircle } from "lucide-react"
 
-export default function UserFormPage() {
-  const router = useRouter()
-  const [fields, setFields] = useState<SchemaField[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
+export default function UserDashboardPage() {
+	return (
+		<div className="space-y-6">
+			<div>
+				<h1 className="text-3xl font-bold text-gray-900">My Dashboard</h1>
+				<p className="mt-2 text-gray-600">
+					Access your forms and track your submissions
+				</p>
+			</div>
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const spreadsheetId = process.env.NEXT_PUBLIC_DEFAULT_SPREADSHEET_ID
-        if (!spreadsheetId) {
-          setError("Missing NEXT_PUBLIC_DEFAULT_SPREADSHEET_ID")
-          return
-        }
-        const repo = new SchemaRepository()
-        const schema = await repo.getLatestBySource(spreadsheetId)
-        setFields(schema?.fields ?? [])
-      } catch (e) {
-        setError("Failed to load schema")
-      }
-    }
-    void load()
-  }, [])
+			<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center">
+							<FileText className="mr-2 h-5 w-5" />
+							Nutrition Assessment
+						</CardTitle>
+						<CardDescription>
+							Complete your nutrition assessment form
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<Link href="/dashboard/user/nutrition-form">
+							<Button className="w-full">
+								Start Form
+							</Button>
+						</Link>
+					</CardContent>
+				</Card>
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const payload: Record<string, unknown> = {}
-    ;(fields ?? []).forEach((f) => {
-      payload[f.key] = formData.get(f.key)
-    })
-    const res = await fetch("/api/forms/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
-    if (res.ok) {
-      const submitted = await res.json()
-      const encoded = encodeURIComponent(JSON.stringify(payload))
-      router.push(`/dashboard/user/confirmation?row=${submitted.externalRowId}&data=${encoded}`)
-    }
-  }
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center">
+							<Clock className="mr-2 h-5 w-5" />
+							Pending Forms
+						</CardTitle>
+						<CardDescription>
+							Forms that need your attention
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-gray-500">No pending forms</p>
+					</CardContent>
+				</Card>
 
-  if (error) return <div className="text-red-600">{error}</div>
-  if (!fields) return <div>Loading...</div>
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center">
+							<CheckCircle className="mr-2 h-5 w-5" />
+							Completed Forms
+						</CardTitle>
+						<CardDescription>
+							Your submitted forms and responses
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-gray-500">No completed forms yet</p>
+					</CardContent>
+				</Card>
+			</div>
 
-  return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Nutrition Plan Form</h1>
-      <form className="space-y-4" onSubmit={submit}>
-        {fields.map((f) => (
-          <div key={f.key} className="grid gap-1">
-            <label className="text-sm font-medium">{f.label}</label>
-            <input className="border rounded px-3 py-2" name={f.key} required={!!f.required} />
-          </div>
-        ))}
-        <button className="rounded bg-blue-600 text-white px-4 py-2" type="submit">Submit</button>
-      </form>
-    </div>
-  )
+			<Card>
+				<CardHeader>
+					<CardTitle>Recent Activity</CardTitle>
+					<CardDescription>
+						Your recent form submissions and updates
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="text-center py-8">
+						<FileText className="mx-auto h-12 w-12 text-gray-400" />
+						<h3 className="mt-2 text-sm font-medium text-gray-900">No recent activity</h3>
+						<p className="mt-1 text-sm text-gray-500">
+							Complete a form to see your activity here.
+						</p>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	)
 }
 
 

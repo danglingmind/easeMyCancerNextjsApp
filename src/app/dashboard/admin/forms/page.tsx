@@ -2,13 +2,14 @@ import { requireAdmin } from "@/lib/auth"
 import { getDatabase } from "@/lib/mongodb"
 import { Form } from "@/types/forms"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import { Plus, Edit, Trash2, Download } from "lucide-react"
 
 export default async function AdminFormsPage() {
   await requireAdmin()
   
   const db = await getDatabase()
-  const forms = await db.collection("forms").find({}).toArray() as Form[]
+  const forms = await db.collection<Form>("forms").find({}).toArray()
 
   return (
     <div className="space-y-6">
@@ -19,13 +20,12 @@ export default async function AdminFormsPage() {
             Create, edit, and manage your feedback forms
           </p>
         </div>
-        <Link
-          href="/admin/forms/new"
-          className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Create New Form
-        </Link>
+        <Button asChild>
+          <Link href="/dashboard/admin/forms/new">
+            <Plus className="mr-2 h-4 w-4" />
+            Create New Form
+          </Link>
+        </Button>
       </div>
 
       {forms.length === 0 ? (
@@ -40,13 +40,12 @@ export default async function AdminFormsPage() {
             Get started by creating a new form.
           </p>
           <div className="mt-6">
-            <Link
-              href="/admin/forms/new"
-              className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create New Form
-            </Link>
+            <Button asChild>
+              <Link href="/dashboard/admin/forms/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Form
+              </Link>
+            </Button>
           </div>
         </div>
       ) : (
@@ -75,13 +74,13 @@ export default async function AdminFormsPage() {
                   </div>
                   <div className="flex space-x-2">
                     <Link
-                      href={`/admin/forms/${form._id}/edit`}
+                      href={`/dashboard/admin/forms/${form._id}/edit`}
                       className="text-blue-600 hover:text-blue-900"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>
                     <Link
-                      href={`/admin/forms/${form._id}/export`}
+                      href={`/dashboard/admin/forms/${form._id}/export`}
                       className="text-green-600 hover:text-green-900"
                     >
                       <Download className="h-4 w-4" />

@@ -8,7 +8,7 @@ export default async function AdminResponsesPage() {
   await requireAdmin()
   
   const db = await getDatabase()
-  const forms = await db.collection("forms").find({}).toArray() as Form[]
+  const forms = await db.collection<Form>("forms").find({}).toArray()
 
   // Get response counts for each form
   const formsWithCounts = await Promise.all(

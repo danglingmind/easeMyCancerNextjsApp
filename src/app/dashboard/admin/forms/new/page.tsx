@@ -2,120 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { assertDefined } from "@/lib/utils"
-import { type SchemaField } from "@/lib/connectors/connector"
-
-export default function NewFormPage() {
-  const router = useRouter()
-  const [spreadsheetId, setSpreadsheetId] = useState("")
-  const [sheetName, setSheetName] = useState("")
-  const [fields, setFields] = useState<SchemaField[]>([])
-
-  const importHeaders = async () => {
-    assertDefined(spreadsheetId, "Spreadsheet ID is required")
-    const res = await fetch("/api/schema/import", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ spreadsheetId, sheetName }),
-    })
-    if (!res.ok) {
-      alert("Failed to import schema")
-      return
-    }
-    const data = await res.json()
-    setFields(data.fields)
-  }
-
-  const saveSchema = async () => {
-    const res = await fetch("/api/schema/save", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ spreadsheetId, sheetName, fields }),
-    })
-    if (res.ok) {
-      router.push("/dashboard/admin/forms")
-    } else {
-      alert("Failed to save schema")
-    }
-  }
-
-  return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Connect Google Sheet (Nutrition Plan)</h1>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <input
-          className="border rounded px-3 py-2"
-          placeholder="Spreadsheet ID"
-          value={spreadsheetId}
-          onChange={(e) => setSpreadsheetId(e.target.value)}
-        />
-        <input
-          className="border rounded px-3 py-2"
-          placeholder="Sheet name (optional)"
-          value={sheetName}
-          onChange={(e) => setSheetName(e.target.value)}
-        />
-      </div>
-
-      <button className="rounded bg-blue-600 text-white px-4 py-2" onClick={importHeaders}>
-        Import header row as schema
-      </button>
-
-      {fields.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-lg font-medium">Fields</h2>
-          {fields.map((f, idx) => (
-            <div key={idx} className="grid gap-2 sm:grid-cols-4 items-center">
-              <input
-                className="border rounded px-2 py-1"
-                value={f.label}
-                onChange={(e) => {
-                  const copy = [...fields]
-                  copy[idx] = { ...copy[idx], label: e.target.value }
-                  setFields(copy)
-                }}
-              />
-              <select
-                className="border rounded px-2 py-1"
-                value={f.type}
-                onChange={(e) => {
-                  const copy = [...fields]
-                  copy[idx] = { ...copy[idx], type: e.target.value as any }
-                  setFields(copy)
-                }}
-              >
-                <option value="string">string</option>
-                <option value="number">number</option>
-                <option value="date">date</option>
-                <option value="boolean">boolean</option>
-              </select>
-              <label className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={!!f.required}
-                  onChange={(e) => {
-                    const copy = [...fields]
-                    copy[idx] = { ...copy[idx], required: e.target.checked }
-                    setFields(copy)
-                  }}
-                />
-                <span>Required</span>
-              </label>
-              <span className="text-xs text-gray-500">Column: {f.columnRef}</span>
-            </div>
-          ))}
-          <button className="rounded bg-green-600 text-white px-4 py-2" onClick={saveSchema}>
-            Save schema
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
-"use client"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
 // import { requireAdmin } from "@/lib/auth"
 
 export default function NewFormPage() {
@@ -178,7 +64,7 @@ export default function NewFormPage() {
             ...prev,
             schema: JSON.stringify(jsonData, null, 2)
           }))
-        } catch (error) {
+        } catch {
           setError("Invalid JSON file")
         }
       }

@@ -17,6 +17,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
   const navigation = isAdmin
     ? [
         { name: "Forms", href: "/dashboard/admin/forms" },
+        { name: "Schema", href: "/dashboard/admin/schema" },
         { name: "Responses", href: "/dashboard/admin/responses" },
       ]
     : [

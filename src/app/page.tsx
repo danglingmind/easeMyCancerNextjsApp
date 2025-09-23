@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { HeartPulse, Brain, Salad, Flower2, Users, Calendar, ShieldCheck } from "lucide-react"
+import { Brain, Salad, Flower2, Users, Calendar, ShieldCheck } from "lucide-react"
 
 export default function Home() {
   return (

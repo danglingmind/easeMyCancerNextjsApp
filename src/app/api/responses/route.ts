@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { requireAuth } from "@/lib/auth"
 import { getDatabase } from "@/lib/mongodb"
 import { CreateResponseData } from "@/types/responses"
+import { ObjectId } from "mongodb"
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     
     // Verify form exists and is active
     const form = await db.collection("forms").findOne({
-      _id: formId,
+      _id: new ObjectId(formId),
       isActive: true
     })
     

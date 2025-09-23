@@ -1,0 +1,23 @@
+# Copy this to .env.local and fill in your actual values
+
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+
+# MongoDB
+MONGODB_URI=mongodb://localhost:27017/forms_app
+# Or for MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/forms_app
+
+# Google Sheets API
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour private key here\n-----END PRIVATE KEY-----\n"
+NEXT_PUBLIC_DEFAULT_SPREADSHEET_ID=your_default_spreadsheet_id
+
+# Admin Configuration
+ADMIN_EMAILS=admin@example.com,another-admin@example.com
+
+

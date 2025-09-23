@@ -103,6 +103,26 @@ Replace `"admin"` with one of: `"admin"`, `"nutritionist"`, `"end-user"`
 
 **Option B: Automatic Assignment via Webhook**
 
+When You DON'T Need Webhooks:
+
+✅ Roles are set manually in Clerk Dashboard
+
+✅ Roles are set programmatically via Clerk API
+
+✅ You're okay with roles being cached in session claims
+
+✅ You don't need real-time role updates
+
+When You WOULD Need Webhooks:
+
+🔄 You need real-time role updates (user gets new role, immediately has access)
+
+🔄 You want to sync roles with external systems (database, other services)
+
+🔄 You need to log role changes or trigger other actions
+
+�� You want to invalidate sessions when roles change
+
 Create the webhook endpoint:
 
 ```typescript
@@ -337,3 +357,11 @@ For additional help, refer to:
 - [Clerk Documentation](https://clerk.com/docs)
 - [Google Sheets API Documentation](https://developers.google.com/sheets/api)
 - [Next.js Environment Variables](https://nextjs.org/docs/basic-features/environment-variables)
+
+
+
+## Google sheets connection setup
+- create a service account in google console.
+- enable google sheets api 
+- create a secret in service account and download it in json
+- share the sheet with the created service account.

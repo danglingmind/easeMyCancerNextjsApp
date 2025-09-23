@@ -6,16 +6,17 @@ import * as XLSX from "xlsx"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAdmin()
     
     const db = await getDatabase()
+    const { id } = await params
     
     // Get form details
     const form = await db.collection("forms").findOne({
-      _id: new ObjectId(params.id)
+      _id: new ObjectId(id)
     })
     
     if (!form) {
@@ -27,7 +28,7 @@ export async function GET(
     
     // Get all responses for this form
     const responses = await db.collection("responses").find({
-      formId: params.id
+      formId: id
     }).toArray()
     
     if (responses.length === 0) {
@@ -39,7 +40,7 @@ export async function GET(
     
     // Prepare data for Excel export
     const exportData = responses.map((response) => {
-      const row: any = {
+      const row: Record<string, unknown> = {
         "Response ID": response._id,
         "User ID": response.userId,
         "Submitted At": new Date(response.submittedAt).toLocaleString(),

@@ -2,7 +2,7 @@ export interface Form {
   _id: string
   title: string
   description: string
-  schema: any // SurveyJS JSON schema
+  schema: Record<string, unknown> // SurveyJS JSON schema
   createdBy: string
   createdAt: string
   updatedAt: string
@@ -12,11 +12,11 @@ export interface Form {
 export interface CreateFormData {
   title: string
   description: string
-  schema: any
+  schema: Record<string, unknown>
 }
 
 export interface UpdateFormData {
   title?: string
   description?: string
-  schema?: any
+  schema?: Record<string, unknown>
 }

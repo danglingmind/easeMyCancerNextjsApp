@@ -4,7 +4,7 @@ import { SchemaRepository } from "@/lib/repositories/schemaRepository"
 
 export async function POST(req: Request) {
   const { userId } = await requireAdmin()
-  const { spreadsheetId, sheetName, fields } = await req.json()
+  const { spreadsheetId, fields } = await req.json()
 
   if (!spreadsheetId || !Array.isArray(fields)) {
     return NextResponse.json({ error: "invalid payload" }, { status: 400 })

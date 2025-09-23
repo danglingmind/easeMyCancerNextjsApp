@@ -4,5 +4,5 @@ export const ADMIN_EMAILS = [
 ] as const
 
 export function isAdminEmail(email: string): boolean {
-  return ADMIN_EMAILS.includes(email as any)
+  return (ADMIN_EMAILS as readonly string[]).includes(email)
 }

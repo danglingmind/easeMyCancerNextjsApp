@@ -4,11 +4,12 @@ import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Survey } from "survey-react-ui"
 import { Model } from "survey-core"
+import { Form } from "@/types/forms"
 
 export default function FormPage() {
   const params = useParams()
   const router = useRouter()
-  const [form, setForm] = useState<any>(null)
+  const [form, setForm] = useState<Form | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
@@ -34,7 +35,7 @@ export default function FormPage() {
     }
   }, [params.id])
 
-  const handleComplete = async (survey: any) => {
+  const handleComplete = async (survey: Model) => {
     setSubmitting(true)
     try {
       const response = await fetch("/api/responses", {

@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -6,10 +7,20 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
 ])
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     auth.protect()
   }
+
+  // Add custom session claims to JWT token
+  const { userId, sessionClaims } = await auth()
+  
+  if (userId && !sessionClaims?.role) {
+    // This will be handled by Clerk's session token customization
+    // The role will be added via Clerk Dashboard or API
+  }
+
+  return NextResponse.next()
 })
 
 export const config = {

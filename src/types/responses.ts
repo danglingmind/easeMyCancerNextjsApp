@@ -2,12 +2,12 @@ export interface Response {
   _id: string
   formId: string
   userId: string
-  response: any // Dynamic response data
+  response: Record<string, unknown> // Dynamic response data
   submittedAt: string
 }
 
 export interface CreateResponseData {
   formId: string
   userId: string
-  response: any
+  response: Record<string, unknown>
 }

@@ -12,7 +12,7 @@ export default async function UserFormsPage() {
   }
   
   const db = await getDatabase()
-  const forms = await db.collection("forms").find({ isActive: true }).toArray() as Form[]
+  const forms = await db.collection<Form>("forms").find({ isActive: true }).toArray()
 
   return (
     <div className="space-y-6">
