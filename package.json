@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:gsheets": "node scripts/check-google-sheets.js",
+    "check:mongodb": "node scripts/check-mongodb.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
