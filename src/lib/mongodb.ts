@@ -25,12 +25,32 @@ function validateMongoURI(uri: string): void {
 
 validateMongoURI(uri)
 
-// Minimal connection options to avoid parsing errors
+// Vercel-optimized connection options for SSL/TLS issues
 const options: MongoClientOptions = {
-  // Basic connection settings
+  // SSL/TLS configuration for Vercel
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+  tlsAllowInvalidHostnames: false,
+  
+  // Connection settings optimized for serverless
   maxPoolSize: 1,
-  connectTimeoutMS: 10000,
-  serverSelectionTimeoutMS: 10000,
+  minPoolSize: 0,
+  maxIdleTimeMS: 30000,
+  
+  // Timeout settings for Vercel
+  connectTimeoutMS: 30000,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 60000,
+  
+  // Retry settings
+  retryWrites: true,
+  retryReads: true,
+  
+  // Compression for better performance
+  compressors: ['zlib'],
+  
+  // Heartbeat settings
+  heartbeatFrequencyMS: 10000,
 }
 
 let clientPromise: Promise<MongoClient> | null = null
