@@ -4,12 +4,12 @@ import { google } from "googleapis"
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		await requireAdmin()
 
-		const spreadsheetId = params.id
+		const { id: spreadsheetId } = await params
 		if (!spreadsheetId) {
 			return NextResponse.json(
 				{ error: "Spreadsheet ID required" },
